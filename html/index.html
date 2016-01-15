@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>HSV Hero</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+    body {
+        padding-top: 70px;
+        /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    }
+    </style>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src='js/init.js'></script>
+    <script src='js/world.js'></script>
+    <script src='js/bleepsixRender.js'></script>
+    <script src='js/bleepsixAux.js'></script>
+
+    <script src="js/spectrum.js"></script>
+
+    <link rel="stylesheet" href="css/spectrum.css"/>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">HSV Hero</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li> <a href="#">About</a> </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+          <!-- ******************************* -->
+          <!-- ******************************* -->
+          <!-- ******************************* -->
+          <!-- Canvas -->
+          <div class="col-md-3">
+            <div class="row">
+              <div class="btn-group" role="group">
+                <button type="button" id='x1' class="btn btn-default">x1</button>
+                <button type="button" id='x2' class="btn btn-default">x2</button>
+                <button type="button" id='x4' class="btn btn-default">x4</button>
+                <button type="button" id='x8' class="btn btn-default">x8</button>
+                <button type="button" id='x16' class="btn btn-default">x16</button>
+              </div>
+            </div>
+            <div class="row">
+              <canvas 
+                id='canvas' 
+                width='256' height='512' 
+                tabindex='0'> </canvas>
+            </div>
+            <div class="row">
+              Background
+              <input id="background-color" />
+            </div>
+          </div>
+
+
+          <!-- ******************************* -->
+          <!-- ******************************* -->
+          <!-- ******************************* -->
+          <!-- Colors -->
+          <div class="col-md-5">
+
+            <div class="row">
+              <button type="button" id="reset_color" class="btn btn-default">Reset</button>
+              <button type="button" id="random_color" class="btn btn-default">Random</button>
+            </div>
+
+            <div class="row">
+
+              <div class='col-md-2'>
+                Tunic
+              </div>
+
+              <div class='col-md-10'>
+                <input id="tunic-color-0" />
+                <input id="tunic-color-1" />
+                <input id="tunic-color-2" />
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class='col-md-2'>
+                Boot
+              </div>
+
+              <div class='col-md-10'>
+                <input id="boot-color-0" />
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class='col-md-2'>
+                Pants
+              </div>
+
+              <div class="col-md-10">
+                <input id="pant-color-0" />
+                <input id="pant-color-1" />
+              </div>
+
+            </div>
+
+            <div class="row">
+              
+              <div class='col-md-2'>
+              Arm
+              </div>
+
+              <div class="col-md-10">
+                <input id="arm-color-0" />
+              </div>
+
+            </div>
+
+            <div class="row">
+              
+              <div class='col-md-2'>
+              Skin
+              </div>
+
+              <div class="col-md-10">
+                <input id="skin-color-0" />
+                <input id="skin-color-1" />
+                <input id="skin-color-2" />
+              </div>
+
+            </div>
+
+            <div class="row">
+              
+              <div class='col-md-2'>
+              Hair
+              </div>
+
+              <div class="col-md-10">
+                <input id="hair-color-0" />
+              </div>
+
+            </div>
+
+            <div class="row">
+              
+              <div class='col-md-2'>
+              Weapon
+              </div>
+
+              <div class="col-md-10">
+                <input id="weapon-color-0" />
+                <input id="weapon-color-1" />
+                <input id="weapon-color-2" />
+                <input id="weapon-color-3" />
+                <input id="weapon-color-4" />
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ******************************* -->
+          <!-- ******************************* -->
+          <!-- ******************************* -->
+          <!-- Animation -->
+          <div class="col-md-2">
+
+            <div class="row"><label>Animation Options</label></div>
+
+            <div class="row">
+              <div class="col-md-2">
+                <button type="button" class="btn btn-default" id="play-pause">
+                  <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="row">Delay (ms) <input id="delay-input" type="text" value='100'></input> </div>
+            <div class="row"> <input type="checkbox" id="all-checkbox"> all </div>
+            <div class="row"> <input type="checkbox" id="idle-checkbox"> Idle </div>
+            <div class="row"> <input type="checkbox" id="walk-checkbox"> Walk</div>
+            <div class="row"> <input type="checkbox" id="jump-checkbox"> Jump</div>
+            <div class="row"> <input type="checkbox" id="attack-checkbox"> Attack</div>
+            <div class="row"> <input type="checkbox" id="bow-checkbox"> Bow</div>
+          </div>
+
+        </div>
+
+    </div>
+    <!-- /.container -->
+
+</body>
+
+</html>
