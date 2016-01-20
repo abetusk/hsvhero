@@ -81,7 +81,7 @@ function init() {
   console.log("init");
 
   g_imgcache = new imageCache();
-  g_imgcache.add("base_sprite", "assets/base_sprite.png");
+  g_imgcache.add("base_sprite", "assets/hsvhero_0.png");
 
   $('#x1').on('click', function() { console.log("x1"); g_world.scale = 1; });
   $('#x2').on('click', function() { console.log("x2"); g_world.scale = 2; });
@@ -120,12 +120,19 @@ function init() {
 
   $('#idle-checkbox').on('click', function() { g_world.animLoop("idle", document.getElementById("idle-checkbox").checked); });
   $('#walk-checkbox').on('click', function() { g_world.animLoop("walk", document.getElementById("walk-checkbox").checked); });
-  $('#jump-checkbox').on('click', function() { console.log("jump-checkbox...", document.getElementById("jump-checkbox").checked); });
-  $('#attack-checkbox').on('click', function() { console.log("attack-checkbox...", document.getElementById("attack-checkbox").checked); });
-  $('#bow-checkbox').on('click', function() { console.log("bow-checkbox...", document.getElementById("bow-checkbox").checked); });
+  $('#jump-checkbox').on('click', function() { g_world.animLoop("jump", document.getElementById("jump-checkbox").checked); });
+  $('#attack-checkbox').on('click', function() { g_world.animLoop("attack", document.getElementById("attack-checkbox").checked); });
+  $('#attack-crouch-checkbox').on('click', function() { g_world.animLoop("attack-crouch", document.getElementById("attack-crouch-checkbox").checked); });
+  $('#attack-jump-checkbox').on('click', function() { g_world.animLoop("attack-jump", document.getElementById("attack-jump-checkbox").checked); });
+  $('#shield-checkbox').on('click', function() { g_world.animLoop("shield", document.getElementById("shield-checkbox").checked); });
+  $('#shield-crouch-checkbox').on('click', function() { g_world.animLoop("shield-crouch", document.getElementById("shield-crouch-checkbox").checked); });
+  $('#bow-checkbox').on('click', function() { g_world.animLoop("bow", document.getElementById("bow-checkbox").checked); });
+
+  document.getElementById("walk-checkbox").checked = true;
+  g_world.animLoop("walk", true);
 
   var parts = [ "tunic", "boot", "pant", "arm", "skin", "hair", "weapon" ];
-  var npart = [       3,      1,      2,     1,      3,      1,        5 ];
+  var npart = [       3,      3,      2,     3,      3,      1,        6 ];
 
   for (var i=0; i<parts.length; i++) {
     for (var j=0; j<npart[i]; j++) {
@@ -156,6 +163,9 @@ function init() {
              new Uint8ClampedArray([ Math.floor(rgb.r),
                                      Math.floor(rgb.g),
                                      Math.floor(rgb.b), 255 ]);
+
+          g_world.update_class_color(__it_name);
+
           g_world.fill();
           };
         })(ele_name, it_name)
@@ -167,6 +177,7 @@ function init() {
 
 
   $("#background-color").spectrum({
+    preferredFormat:"hsv",
     showInput:true,
     allowEmpty:true,
     color:"hsva(0,0%,0%,0)",
@@ -201,6 +212,52 @@ function init() {
 
       $("#" + ele_parts[0] + "-color-" + ele_parts[1]).spectrum("set", c.toHexString());
     }
+    g_world.fill();
+
+  });
+
+  $("#random_hsv_color").on("click", function() {
+
+    var key_color = ["tunic_0", "boot_0", "pant_0", "arm_0", "skin_0", "hair_0"]
+
+    for (var ind in key_color) {
+      var ele = key_color[ind];
+
+      var ele_parts = ele.split("_");
+      var src_color = g_world.ele_map[ele];
+
+      var r = Math.floor(Math.random()*255);
+      var g = Math.floor(Math.random()*255);
+      var b = Math.floor(Math.random()*255);
+
+      var c = tinycolor("rgb(" + r + "," + g + "," + b + ")");
+
+      g_world.color_map[src_color] =
+         new Uint8ClampedArray([ r, g, b, 255 ]);
+
+      g_world.update_class_color(ele);
+      $("#" + ele_parts[0] + "-color-" + ele_parts[1]).spectrum("set", c.toHsvString());
+    }
+
+    var key_color = ["weapon_0", "weapon_1", "weapon_2", "weapon_3", "weapon_4", "weapon_5"] 
+
+    for (var ind in key_color) {
+      var ele = key_color[ind];
+
+      var ele_parts = ele.split("_");
+      var src_color = g_world.ele_map[ele];
+
+      var r = Math.floor(Math.random()*255);
+      var g = Math.floor(Math.random()*255);
+      var b = Math.floor(Math.random()*255);
+
+      var c = tinycolor("rgb(" + r + "," + g + "," + b + ")");
+
+      g_world.color_map[src_color] =
+         new Uint8ClampedArray([ r, g, b, 255 ]);
+      $("#" + ele_parts[0] + "-color-" + ele_parts[1]).spectrum("set", c.toHsvString());
+    }
+
     g_world.fill();
 
   });

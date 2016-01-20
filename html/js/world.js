@@ -8,55 +8,98 @@ function mainWorld() {
   this.delay = 100;
 
   this.canvas = document.createElement("canvas");
-  this.canvas.width = 256;
-  this.canvas.height = 512;
+  this.canvas.width = 336;
+  this.canvas.height = 576;
 
   this.ctx = this.canvas.getContext("2d");
 
-  this.scale = 16;
+  this.scale = 8;
 
   this.sprite_name = "base_sprite";
+
+  this.sat_ratio = [0.15, 0.15, 0.3];
+  this.val_ratio = [0.3, 0.3, 0.6];
+
+  // ratios go from current index to next.
+  // assumes darkets first.
+  // hue is shifted mod 360.
+  //
+  this.ratio = {
+    "tunic" : [ { s:.86, v:1.3, h:0 }, { s:.6, v:1.0, h:225 } ],
+    "boot" :  [ { s:1.0, v:1.6, h:0 }, { s:1.0, v:1.7, h:0 } ],
+    "pant" : [ { s:1.0, v:1.25, h:0 } ],
+    "skin" : [ { s:1.0, v:1.6, h:0 }, { s:2.0, v:0.5, h:150 } ],
+    "arm" : [ { s:1.0, v:1.2, h:0 }, { s:1.0, v:1.7, h:0 }]
+  };
 
   this.ok = true;
 
   this.ele_map = {
-    "tunic_0" : "255:127:35:255",
-    "tunic_1" : "195:87:0:255",
+    "tunic_0" : "195:87:0:255",
+    "tunic_1" : "255:127:35:255",
     "tunic_2" : "161:127:255:255",
 
     "boot_0" : "123:51:35:255",
+    "boot_1" : "196:80:56:255",
+    "boot_2" : "229:93:66:255",
 
-    "pant_0" : "160:160:160:255",
-    "pant_1" : "128:128:128:255",
+    "pant_0" : "128:128:128:255",
+    "pant_1" : "160:160:160:255",
 
     "arm_0" : "114:178:80:255",
+    "arm_1" : "135:211:95:255",
+    "arm_2" : "158:247:111:255",
 
-    "skin_0" : "127:255:191:255",
-    "skin_1" : "79:158:118:255",
+    "skin_0" : "79:158:118:255",
+    "skin_1" : "127:255:191:255",
     "skin_2" : "127:0:110:255",
 
     "hair_0" : "0:0:0:255",
 
-    "weapon_0" : "255:233:127:255",
-    "weapon_1" : "213:181:255:255",
-    "weapon_2" : "255:225:170:255",
-    "weapon_3" : "183:255:194:255",
-    "weapon_4" : "255:201:238:255",
+    "weapon_0" : "255:233:127:255", // pouch
+    "weapon_1" : "213:181:255:255", // sword
+    "weapon_2" : "255:201:238:255", // bow
+    "weapon_3" : "183:255:194:255", // string
+    "weapon_4" : "49:12:255:255", // shield
+    "weapon_5" : "137:168:255:255", // shield
 
-    "background" : "192:192:192:255"
+    "background" : "255:255:255:0"
+    //"background" : "192:192:192:255"
   };
 
+  this.ele_count = { "tunic":3, "boot":3, "pant":2, "arm":3, "skin":3, "hair":1, "weapon":5, "background":1 };
+
+  this.lock_state = "base-shadow-highlight";
 
   this.color_map = {};
   //this.random_color_map();
   this.reset_color_map();
 
+  var w = 48;
+  var h = 48;
+
+  var d = 12;
+
   this.anim_loop = {
-    "idle": { active:false, pos:[ [0,0], [16,0], [32,0] ], sz:[[16,32],[16,32],[16,32]], delay:[15,15,30] },
-    "walk": { active:false, pos:[ [0,32], [16,32], [32,32], [48,32] ], sz:[[16,32],[16,32],[16,32],[16,32]], delay:[3,3,3,3] },
+    "idle": { active:false, pos:[ [0,0], [w,0], [2*w,0] ], sz:[[w,h],[w,h],[w,h]], delay:[d,d,d] },
+    "walk": { active:false, pos:[ [0,0], [0,h], [w,h], [2*w,h], [3*w,h] ], sz:[[w,h], [w,h],[w,h],[w,h],[w,h]], delay:[d,d,d,d,d] },
+    "jump": { active:false, pos:[ [0,0], [0,2*h], [0,3*h], [0,4*h], [0,5*h] ],
+                              sz:[[w,h], [w,h],   [w,h],   [w,h],   [w,h]], delay:[d,d,d,d,d] },
+    "attack": { active:false, pos:[ [0,0], [0,6*h], [w,6*h], [2*w,6*h] ],
+                              sz:[  [w,h], [w,h],   [w,h],   [w,h],   ], delay:[d,d,d,d] },
+    "attack-crouch": { active:false, pos:[ [0,0], [0,7*h], [w,7*h], [2*w,7*h] ],
+                                     sz:[  [w,h], [w,h],   [w,h],   [w,h],   ], delay:[d,d,d,d] },
+    "attack-jump": { active:false, pos:[ [0,0], [0,3*h], [0,8*h], [w,8*h], [0,4*h] ],
+                                     sz:[  [w,h], [w,h],   [w,h],   [w,h], [w,h]  ], delay:[d,d,d,d,d] },
+    "shield": { active:false, pos:[ [0,0], [0,9*h] ],
+                              sz: [ [w,h], [w,h]  ], delay:[d,d] },
+    "shield-crouch": { active:false, pos:[ [0,0], [0,10*h] ],
+                                     sz: [ [w,h], [w,h],   ], delay:[d,d] },
+    "bow": { active:false, pos:[ [0,11*h], [w,11*h], [2*w,11*h], [3*w,11*h], [4*w,11*h], [5*w,11*h] ],
+                                     sz: [ [w,h],    [w,h],      [w,h],      [w,h],      [w,h] ], delay:[d,d,d,d,d] },
   };
 
-  this.anim_order = [ "idle", "walk" ];
+  this.anim_order = [ "idle", "walk", "jump", "attack", "attack-crouch", "attack-jump", "shield", "shield-crouch", "bow" ];
 
   this.reset_anim_state();
 
@@ -109,6 +152,109 @@ mainWorld.prototype.random_color_map = function() {
   }
 
 }
+
+mainWorld.prototype.update_class_color = function(class_color_name) {
+
+  if (this.lock_state == "none") { return; }
+
+  var name_parts = class_color_name.split("_");
+
+  // some kind of error
+  //
+  if (!(name_parts[0] in this.ele_count)) { return; }
+
+  var class_name = name_parts[0];
+
+  if (class_name == "weapon") { return; }
+
+  // no colors to derive
+  //
+  if (this.ele_count[class_name] < 2) { return; }
+
+  var updated_idx = parseInt(name_parts[1]);
+  var src_str = this.ele_map[class_color_name];
+  var val_ar = this.color_map[src_str];
+
+  var rgb_str = val_ar.slice(0,3).join(",");
+
+  var color = tinycolor("rgb(" + rgb_str + ")");
+
+  var hsva = color.toHsv();
+
+  var ratio = this.ratio[class_name];
+
+  if (this.lock_state == "base-shadow-highlight") {
+
+    var cur_hue = hsva.h;
+    var cur_sat = hsva.s;
+    var cur_val = hsva.v;
+
+    for (var ii=(updated_idx-1); ii>=0; ii--) {
+      var s = cur_sat / ratio[ii].s;
+      if (s >= 1.0) { s = 1.0; }
+      else if (s<=0) { s = 0.0; }
+
+      var v = cur_val / ratio[ii].v;
+      if (v >= 1.0) { v = 1.0; }
+      else if (v<=0) { v=0.0; }
+
+      var h = (cur_hue - ratio[ii].h + 360)%360;
+
+      var update_class_name = class_name + "_" + ii;
+
+      this.set_color_hsv(update_class_name, class_name + "-color-" + ii, h, s, v);
+
+      cur_hue = h;
+      cur_sat = s;
+      cur_val = v;
+    }
+
+    var cur_hue = hsva.h;
+    var cur_sat = hsva.s;
+    var cur_val = hsva.v;
+
+    for (var ii=(updated_idx+1); ii<this.ele_count[class_name]; ii++) {
+      var h = (cur_hue + ratio[ii-1].h + 360)%360;
+      var s = cur_sat * ratio[ii-1].s;
+      if (s>=1.0) { s=1.0; } else if (s<=0.0) { s=0.0; }
+      var v = cur_val * ratio[ii-1].v;
+      if (v>=1.0) { v=1.0; } else if (v<=0.0) { v=0.0; }
+      var update_class_name = class_name + "_" + ii;
+      this.set_color_hsv(update_class_name, class_name + "-color-" + ii, h, s, v);
+      cur_hue = h;
+      cur_sat = s;
+      cur_val = v;
+    }
+
+  }
+
+  else if (this.lock_state == "base-shadow") {
+  }
+
+  else if (this.lock_state == "shadow-highlight") {
+  }
+
+}
+
+mainWorld.prototype.set_color_hsv = function(class_name, html_ele_id, h, s, v) {
+
+  var new_hsv = tinycolor("hsv(" + h + "," + s + "," + v + ")");
+  var rgb = new_hsv.toRgb();
+
+  var src_color = this.ele_map[class_name]
+  this.color_map[src_color] =
+     new Uint8ClampedArray([ Math.floor(rgb.r),
+                             Math.floor(rgb.g),
+                             Math.floor(rgb.b), 255 ]);
+
+  //$("#" + class_name + "-color-" + ii).spectrum("set", new_hsv.toHexString());
+  var thsv = new_hsv.toHsv();
+  hsv_str = "hsv(" + thsv.h + "," + thsv.s + "," + thsv.v + ")";
+  //$("#" + html_ele_id).spectrum("set", new_hsv.toHexString());
+  $("#" + html_ele_id).spectrum("set", hsv_str);
+}
+
+
 
 mainWorld.prototype.animLoop = function(anim_type, flag) {
   this.anim_loop[anim_type].active = flag;
@@ -231,6 +377,7 @@ mainWorld.prototype.update = function() {
     var nxt_ind = -1;
 
     for (var ind=0; ind<this.anim_order.length; ind++) {
+      var ele = this.anim_order[ind];
       if (!this.anim_loop[ele].active) { continue; }
       if (bfr_ind < cur_ind) { bfr_ind = ind; }
       if ((nxt_ind<0) && (ind>cur_ind)) { nxt_ind = ind; }
