@@ -98,8 +98,22 @@ function save_history(cm) {
 
 function load_from_history(hist_ind) {
   g_world.color_map = g_color_history[hist_ind];
+  fill_map();
   g_world.fill();
 }
+
+function fill_map() {
+  for (var ele in g_world.ele_map) {
+    var src_color = g_world.ele_map[ele];
+    var dst_color = g_world.color_map[src_color];
+
+    ele_parts = ele.split("_");
+    var c = tinycolor({r:dst_color[0], g:dst_color[1], b:dst_color[2]});
+
+    $("#" + ele_parts[0] + "-color-" + ele_parts[1]).spectrum("set", c.toHexString());
+  }
+}
+
 
 function init() {
 
@@ -322,10 +336,7 @@ function init() {
 
     // Finally add it to the history list
     //
-
     var ind = g_color_history.length;
-    //var cpy = simplecopy(g_world.color_map);
-    //g_color_history.push(cpy);
     save_history(g_world.color_map);
     $("#history-list").append('<a href="#" onclick="load_from_history(' + ind + ')" class="list-group-item">Historic ' + (ind+1) + '</a>');
 
@@ -334,6 +345,7 @@ function init() {
   $("#random_color").on("click", function() {
     g_world.random_color_map();
 
+    /*
     for (var ele in g_world.ele_map) {
       var src_color = g_world.ele_map[ele];
       var dst_color = g_world.color_map[src_color];
@@ -343,7 +355,17 @@ function init() {
 
       $("#" + ele_parts[0] + "-color-" + ele_parts[1]).spectrum("set", c.toHexString());
     }
+    */
+    fill_map();
+
     g_world.fill();
+
+
+    // Finally add it to the history list
+    //
+    var ind = g_color_history.length;
+    save_history(g_world.color_map);
+    $("#history-list").append('<a href="#" onclick="load_from_history(' + ind + ')" class="list-group-item">Historic ' + (ind+1) + '</a>');
 
   });
 
