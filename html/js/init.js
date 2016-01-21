@@ -74,11 +74,44 @@ function delayed_init() {
   }
 }
 
+function _clamp(val, l, u) {
+  val = ((val<l) ? l : val);
+  val = ((val>u) ? u : val);
+  return val;
+}
+
+var g_color_history = [];
+
+function save_history(cm) {
+  var cm_cpy = {};
+
+  for (var key in cm) {
+    console.log(">>", key, cm[key]);
+    var a = [];
+    for (var ii=0; ii<cm[key].length; ii++) {
+      a.push(cm[key][ii]);
+    }
+    cm_cpy[key] =  new Uint8ClampedArray(a);
+  }
+  g_color_history.push(cm_cpy);
+}
+
+function load_from_history(hist_ind) {
+  g_world.color_map = g_color_history[hist_ind];
+  g_world.fill();
+}
+
 function init() {
 
   setTimeout(delayed_init, 100);
 
-  console.log("init");
+  // Download functionality
+  //
+  var button = document.getElementById("btn-download");
+  button.addEventListener("click", function(e) {
+    var dataURL = g_world.canvas.toDataURL("image/png");
+    button.href = dataURL;
+  });
 
   g_imgcache = new imageCache();
   g_imgcache.add("base_sprite", "assets/hsvhero_0.png");
@@ -226,11 +259,38 @@ function init() {
       var ele_parts = ele.split("_");
       var src_color = g_world.ele_map[ele];
 
+      /*
       var r = Math.floor(Math.random()*255);
       var g = Math.floor(Math.random()*255);
       var b = Math.floor(Math.random()*255);
-
       var c = tinycolor("rgb(" + r + "," + g + "," + b + ")");
+      */
+
+      var h_range = g_world.random_h_range;
+      var h_base = g_world.random_h_base;
+
+      var s_range = g_world.random_s_range;
+      var s_base = g_world.random_s_base;
+
+      var v_range = g_world.random_v_range;
+      var v_base = g_world.random_v_base;
+
+      var h = Math.floor(Math.random()*h_range + h_base);
+      h = _clamp(h, 0, 360);
+
+      var s = Math.random()*s_range + s_base;
+      s = _clamp(s, 0, 1);
+
+      var v = Math.random()*v_range + v_base;
+      v = _clamp(v, 0, 1);
+
+      hsv_str = "hsv(" + h + "," + s + "," + v + ")";
+      var c = tinycolor(hsv_str);
+
+      var _rgb = c.toRgb();
+      var r = _rgb.r;
+      var b = _rgb.b;
+      var g = _rgb.g;
 
       g_world.color_map[src_color] =
          new Uint8ClampedArray([ r, g, b, 255 ]);
@@ -260,6 +320,15 @@ function init() {
 
     g_world.fill();
 
+    // Finally add it to the history list
+    //
+
+    var ind = g_color_history.length;
+    //var cpy = simplecopy(g_world.color_map);
+    //g_color_history.push(cpy);
+    save_history(g_world.color_map);
+    $("#history-list").append('<a href="#" onclick="load_from_history(' + ind + ')" class="list-group-item">Historic ' + (ind+1) + '</a>');
+
   });
 
   $("#random_color").on("click", function() {
@@ -278,6 +347,32 @@ function init() {
 
   });
 
+  $("#arm-lock-button").on("click", function() {
+
+    var ele = document.getElementById("arm-lock-button");
+    var bfr_state = ele.getAttribute("aria-pressed");
+
+    if (bfr_state == "true") {
+      g_world.lock_arm = false;
+    } else {
+      g_world.lock_arm = true;
+    }
+
+  });
+
+  $("#boot-lock-button").on("click", function() {
+
+    var ele = document.getElementById("boot-lock-button");
+    var bfr_state = ele.getAttribute("aria-pressed");
+
+    if (bfr_state == "true") {
+      g_world.lock_boot = false;
+    } else {
+      g_world.lock_boot = true;
+    }
+
+  });
+
   /*
   $('#tunic-color-1').spectrum({
     color:"#f00",
@@ -289,6 +384,22 @@ function init() {
     change: function(c) { console.log("tunic-0 >>>", c.toHexString()); }
   });
   */
+
+  $("input[name=radio-0]").click(function() {
+    console.log(">>>", $(this).val());
+
+    var val = $(this).val();
+
+    if (val=="all") {
+      g_world.lock_state = "all";
+    }
+
+    else if (val=="none") {
+      g_world.lock_state = "none";
+    }
+
+  });
+
 
 }
 

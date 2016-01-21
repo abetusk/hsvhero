@@ -20,6 +20,15 @@ function mainWorld() {
   this.sat_ratio = [0.15, 0.15, 0.3];
   this.val_ratio = [0.3, 0.3, 0.6];
 
+  this.random_h_range = 360;
+  this.random_h_base = 0;
+
+  this.random_s_range = 1.0;
+  this.random_s_base = 0.0;
+
+  this.random_v_range = 1.0;
+  this.random_v_base = 0.0;
+
   // ratios go from current index to next.
   // assumes darkets first.
   // hue is shifted mod 360.
@@ -70,6 +79,8 @@ function mainWorld() {
   this.ele_count = { "tunic":3, "boot":3, "pant":2, "arm":3, "skin":3, "hair":1, "weapon":5, "background":1 };
 
   this.lock_state = "base-shadow-highlight";
+  this.lock_arm = false;
+  this.lock_boot = false;
 
   this.color_map = {};
   //this.random_color_map();
@@ -176,14 +187,38 @@ mainWorld.prototype.update_class_color = function(class_color_name) {
   var val_ar = this.color_map[src_str];
 
   var rgb_str = val_ar.slice(0,3).join(",");
-
   var color = tinycolor("rgb(" + rgb_str + ")");
-
   var hsva = color.toHsv();
+
+  if ((class_name == "boot") && this.lock_boot) {
+    var h = hsva.h;
+    var s = hsva.s;
+    var v = hsva.v;
+    for (var ii=0; ii<this.ele_count[class_name]; ii++) {
+      var update_class_name = class_name + "_" + ii;
+      this.set_color_hsv(update_class_name, class_name + "-color-" + ii, h, s, v);
+    }
+    return;
+  }
+
+
+
+  if ((class_name == "arm") && this.lock_arm) {
+    var h = hsva.h;
+    var s = hsva.s;
+    var v = hsva.v;
+    for (var ii=0; ii<this.ele_count[class_name]; ii++) {
+      var update_class_name = class_name + "_" + ii;
+      this.set_color_hsv(update_class_name, class_name + "-color-" + ii, h, s, v);
+    }
+    return;
+  }
+
+
 
   var ratio = this.ratio[class_name];
 
-  if (this.lock_state == "base-shadow-highlight") {
+  if ((this.lock_state == "base-shadow-highlight") || (this.lock_state=="all")) {
 
     var cur_hue = hsva.h;
     var cur_sat = hsva.s;
@@ -232,6 +267,9 @@ mainWorld.prototype.update_class_color = function(class_color_name) {
   }
 
   else if (this.lock_state == "shadow-highlight") {
+  }
+
+  else if (this.lock_state == "none") {
   }
 
 }

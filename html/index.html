@@ -58,18 +58,63 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+
                 <a class="navbar-brand" href="#">HSV Hero</a>
+
             </div>
+
+
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li> <a href="#">About</a> </li>
-                </ul>
+                  <li> <a href="https://github.com/abetusk/hsvhero">Source</a> </li>
+
+                  <li>
+                    <a href="#" class="button" id="btn-download" download='hsvhero.png'><i class="fa fa-cloud-download"></i> Download</a>
+                  </li>
+
+
+<!-- Button trigger modal -->
+<!--
+                  <li>
+                    <button style="margin-top:8px;" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+                      Config
+                    </button>
+                  </li>
+-->
+
+              </ul>
             </div>
+
+
+
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
     </nav>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+      <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+
+      </div> <!-- modal-dialog -->
+    </div> <!-- modal -->
 
     <!-- Page Content -->
     <div class="container">
@@ -152,7 +197,7 @@
             </div>
 
             <div class="row">
-              <div class='col-md-2'> Tunic </div>
+              <div class='col-md-2'> <div class="row"> <div class="col-xs-6"> Tunic </div></div> </div>
               <div class='col-md-8'>
                 <div class="row">
                   <div class="col-xs-4"> <input id="tunic-color-0" /> </div>
@@ -163,7 +208,24 @@
             </div>
 
             <div class="row">
-              <div class='col-md-2'> Boot </div>
+              <div class='col-md-2'>
+                <div class="row">
+                  <div class="col-xs-6">Boot</div>
+                  <div class="col-xs-6">
+                    <button
+                      id="boot-lock-button"
+                      style="transform:scale(0.5)"
+                      type="button"
+                      class="btn btn-default"
+                      data-toggle="button"
+                      aria-pressed="false"
+                      autocomplete="off">
+                      <i style='transform:scale(1.0);' class="fa fa-lock"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               <div class='col-md-8'>
                 <div class="row">
                   <div class="col-xs-4"> <input id="boot-color-0" /> </div>
@@ -174,7 +236,11 @@
             </div>
 
             <div class="row">
-              <div class='col-md-2'> Pants </div>
+
+              <div class='col-md-2'>
+                <div class="row"> <div class="col-xs-6">  Pants  </div></div>
+              </div>
+
               <div class="col-md-8">
                 <div class="row">
                   <div class="col-xs-4"> <input id="pant-color-0" /> </div>
@@ -186,7 +252,25 @@
             </div>
 
             <div class="row">
-              <div class='col-md-2'> Arm </div>
+
+              <div class='col-md-2'>
+                <div class="row">
+                  <div class="col-xs-6"> Arm </div>
+                  <div class="col-xs-6">
+                    <button
+                      id="arm-lock-button"
+                      style="transform:scale(0.5)"
+                      type="button"
+                      class="btn btn-default"
+                      data-toggle="button"
+                      aria-pressed="false"
+                      autocomplete="off">
+                      <i style='transform:scale(1.0);' class="fa fa-lock"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               <div class="col-md-8">
                 <div class="row">
                   <div class="col-xs-4"> <input id="arm-color-0" /> </div>
@@ -197,7 +281,7 @@
             </div>
 
             <div class="row">
-              <div class='col-md-2'> Skin </div>
+              <div class='col-md-2'> <div class="row"> <div class="col-xs-6"> Skin </div></div> </div>
               <div class="col-md-8">
                 <div class="row">
                   <div class="col-xs-4"> <input id="skin-color-0" /> </div>
@@ -208,7 +292,7 @@
             </div>
 
             <div class="row">
-              <div class='col-md-2'> Hair </div>
+              <div class='col-md-2'> <div class="row"> <div class="col-xs-6"> Hair </div></div> </div>
               <div class="col-md-8">
                 <div class="row">
                   <div class="col-xs-4"> <input id="hair-color-0" /> </div>
@@ -217,7 +301,7 @@
             </div>
 
             <div class="row">
-              <div class='col-md-2'> Pouch </div>
+              <div class='col-md-2'> <div class="row"> <div class="col-xs-6">  Pouch  </div></div> </div>
               <div class="col-md-8">
                 <div class="row">
                   <div class="col-xs-4"> <input id="weapon-color-0" /> </div>
@@ -226,7 +310,7 @@
             </div>
 
             <div class="row">
-              <div class='col-md-2'> Sword </div>
+              <div class='col-md-2'> <div class="row"> <div class="col-xs-6">  Sword  </div></div> </div>
               <div class="col-md-8">
                 <div class="row">
                   <div class="col-xs-4"> <input id="weapon-color-1" /> </div>
@@ -235,7 +319,7 @@
             </div>
 
             <div class="row">
-              <div class='col-md-2'> Bow </div>
+              <div class='col-md-2'> <div class="row"> <div class="col-xs-6">  Bow  </div></div> </div>
               <div class="col-md-8">
                 <div class="row">
                   <div class="col-xs-4"> <input id="weapon-color-2" /> </div>
@@ -245,7 +329,7 @@
             </div>
 
             <div class="row">
-              <div class='col-md-2'> Shield </div>
+              <div class='col-md-2'> <div class="row"> <div class="col-xs-6">  Shield  </div></div> </div>
               <div class="col-md-8">
                 <div class="row">
                   <div class="col-xs-4"> <input id="weapon-color-4" /> </div>
@@ -304,8 +388,8 @@
 
             <div class="row">
               <div class="col-md-12">
-                <div class="radio"> <label><input type="radio" name="radio-0" checked="checked">
-                    <i class="fa fa-lock"></i> base-shadow-highlight</input></label>
+                <div class="radio"> <label><input type="radio" name="radio-0" checked="checked" value="all">
+                    <i class="fa fa-lock"></i> shadow-base-highlight</input></label>
                 </div>
               </div>
             </div>
@@ -328,13 +412,34 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="radio">
-                  <label><input type="radio" name="radio-0"> <i class="fa fa-unlock-alt"></i>  none</input></label>
+                  <label><input type="radio" name="radio-0" value="none"> <i class="fa fa-unlock-alt"></i>  none</input></label>
                 </div>
               </div>
-            </div>
+            </div> <!-- row -->
 
+          </div> <!-- col-md-3 -->
+
+        </div> <!-- row -->
+
+        <hr></hr>
+
+        <div class="row">
+
+          <div class="col-md-2"> </div>
+
+          <div class="col-md-8">
+            <h4 style='text-align:center;'>Choice history</h4>
+            <div class="list-group" id="history-list">
+              <!--
+              <a href="#" class="list-group-item">a</a>
+              <a href="#" class="list-group-item">b</a>
+              <a href="#" class="list-group-item">c</a>
+              <a href="#" class="list-group-item">d</a>
+              -->
+            </div>
           </div>
 
+          <div class="col-md-2"> </div>
         </div>
 
     </div>
