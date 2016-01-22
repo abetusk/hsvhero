@@ -86,7 +86,6 @@ function save_history(cm) {
   var cm_cpy = {};
 
   for (var key in cm) {
-    console.log(">>", key, cm[key]);
     var a = [];
     for (var ii=0; ii<cm[key].length; ii++) {
       a.push(cm[key][ii]);
@@ -127,6 +126,60 @@ function init() {
     button.href = dataURL;
   });
 
+  // Upload funcitonality
+  //
+  /*
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+
+    // files is a FileList of File objects. List some properties.
+    var output = [];
+    for (var i = 0, f; f = files[i]; i++) {
+      output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                  f.size, ' bytes, last modified: ',
+                  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                  '</li>');
+    }
+    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+  }
+  */
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+
+    // Loop through the FileList and render image files as thumbnails.
+    for (var i = 0, f; f = files[i]; i++) {
+
+      // Only process image files.
+      if (!f.type.match('image.*')) {
+        console.log("skipping", f);
+        continue;
+      }
+
+      var reader = new FileReader();
+
+      // Closure to capture the file information.
+      reader.onload = (function(theFile) {
+        return function(e) {
+
+          console.log(">>>", e.target.result);
+
+          // Render thumbnail.
+          //var span = document.createElement('span');
+          //span.innerHTML = ['<img class="thumb" src="', e.target.result,
+          //                  '" title="', escape(theFile.name), '"/>'].join('');
+          //document.getElementById('list').insertBefore(span, null);
+        };
+      })(f);
+
+      // Read in the image file as a data URL.
+      reader.readAsDataURL(f);
+    }
+  }
+
+  document.getElementById('file-upload').addEventListener('change', handleFileSelect, false);
+
+  //--
+
   g_imgcache = new imageCache();
   g_imgcache.add("base_sprite", "assets/hsvhero_0.png");
 
@@ -153,6 +206,7 @@ function init() {
     }
   );
 
+  /*
   $("#delay-input").on("change", function() {
     var s_val = document.getElementById("delay-input").value;
     var val = 100;
@@ -162,6 +216,22 @@ function init() {
     } else { val = 100; }
     g_world.setDelay(val);
   });
+  */
+
+  $("#fps-slider-input").slider({
+    value:10,
+    min:1,
+    max:60,
+    step:1,
+    slide: function(event, ui) {
+      console.log(">>>", ui.value);
+      $("#fps-display").val( ui.value + " fps" );
+      g_world.setDelay(1000/ui.value);
+    }
+  });
+  $("#fps-display").val( "10 fps" );
+  g_world.setDelay(1000/10);
+
 
   $('#all-checkbox').on('click', function() { console.log("all-checkbox...", document.getElementById("all-checkbox").checked); });
 
@@ -436,5 +506,5 @@ function rgbToHex(r, g, b) {
 
 
 function color_change(ele_name, color) {
-  console.log(">>>", ele_name, color.toHexString());
+  //console.log(">>>", ele_name, color.toHexString());
 }
