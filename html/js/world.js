@@ -154,7 +154,10 @@ mainWorld.prototype.reset_color_map = function() {
 
 mainWorld.prototype.random_color_map = function() {
   this.color_map = {};
+  this.color_map[this.ele_map["background"]] =
+    new Uint8ClampedArray([255,255,255,255]);
   for (var ele in this.ele_map) {
+    if (ele == "background") { continue; }
     this.color_map[this.ele_map[ele]] = new Uint8ClampedArray(
         [ Math.floor(256*Math.random()),
           Math.floor(256*Math.random()),
