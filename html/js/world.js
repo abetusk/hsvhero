@@ -458,7 +458,14 @@ mainWorld.prototype.draw = function() {
   var ang = 0;
   var alpha = 1;
 
-  g_painter.startDrawColor_a("rgba(0,0,0,1)");
+  var dst_color = this.color_map[ this.ele_map["background"] ];
+  var r = dst_color[0];
+  var g = dst_color[1];
+  var b = dst_color[2];
+  var a = dst_color[3]/255.0;
+
+  g_painter.startDrawColor_a("rgb(255,255,255)");
+  g_painter.fillRect(0, 0, 1024, 1024, "rgba("  + r + "," + g + "," + b + "," + a + ")");
   g_imgcache.draw_s(this.sprite_name, imgx, imgy, imgw, imgh, wx, wy, ww, wh, ang, alpha);
   g_painter.endDraw();
 
