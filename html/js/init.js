@@ -8,6 +8,8 @@ var lastTime = new Date();
 var g_painter = null;
 var g_imgcache = null;
 
+var g_color_picker_input_name_map = {};
+
 function loop() {
   var d = new Date();
   var update = false;
@@ -66,8 +68,61 @@ $(document).ready( function() {
   requestAnimationFrame(loop, 1);
 });
 
+function load_url_state() {
+  var href = window.location.href;
+  href_parts = href.split("?");
+
+  if (href_parts.length!=2) { return; }
+  param_list = href_parts[1];
+  var var_list = param_list.split("&");
+
+  for (var i=0; i<var_list.length; i++) {
+    var var_parts = var_list[i].split("=");
+    if (var_parts.length!=2) { continue; }
+    var var_short_name = var_parts[0];
+    var var_val = var_parts[1];
+
+    var var_name = g_world.ele_short_name_rev_lookup[var_short_name];
+    var cp_inp_name = g_color_picker_input_name_map[var_name];
+
+    var tc = tinycolor("#" + var_val);
+    var rgb = tc.toRgb();
+
+    g_world.set_color_rgb(var_name, cp_inp_name, rgb.r, rgb.g, rgb.b);
+  }
+
+}
+
+function update_url() {
+
+  var param_a = [];
+  for (var ele in g_world.ele_map) {
+    if (ele=="background") { continue; }
+    var short_name = g_world.ele_short_name[ele];
+    var src_color = g_world.ele_map[ele];
+    var cur_color4 = g_world.color_map[src_color];
+    var r = cur_color4[0];
+    var g = cur_color4[1];
+    var b = cur_color4[2];
+    var a = cur_color4[3]/255.0;
+
+    var tc = tinycolor("rgba " + r + " " + g + " " + b + " " + a );
+    var s = tc.toHex();
+
+    param_a.push(short_name + "=" + s);
+  }
+
+  if (param_a.length==0) {
+    window.history.replaceState("", "HSV Hero", "");
+    return;
+  }
+  window.history.replaceState("", "HSV Hero", "?" + param_a.join("&"));
+}
+
 function delayed_init() {
   if (g_imgcache.image["base_sprite"].ready) {
+
+    load_url_state();
     g_world.fill();
   } else {
     setTimeout(delayed_init, 100);
@@ -99,6 +154,7 @@ function load_from_history(hist_ind) {
   g_world.color_map = g_color_history[hist_ind];
   fill_map();
   g_world.fill();
+  update_url();
 }
 
 function fill_map() {
@@ -248,6 +304,8 @@ function init() {
   document.getElementById("walk-checkbox").checked = true;
   g_world.animLoop("walk", true);
 
+  // Color picker inputs
+  //
   var parts = [ "tunic", "boot", "pant", "arm", "skin", "hair", "weapon" ];
   var npart = [       3,      3,      2,     3,      3,      1,        6 ];
 
@@ -256,6 +314,8 @@ function init() {
 
       var ele_name = "#" + parts[i] + "-color-" + j;
       var it_name = parts[i] + "_" + j;
+
+      g_color_picker_input_name_map[it_name] = parts[i] + "-color-" + j;
 
       var rgba = g_world.color_map[ g_world.ele_map[it_name] ];
 
@@ -284,6 +344,8 @@ function init() {
           g_world.update_class_color(__it_name);
 
           g_world.fill();
+          update_url();
+
           };
         })(ele_name, it_name)
       });
@@ -313,6 +375,7 @@ function init() {
                                    Math.floor(rgb.g),
                                    Math.floor(rgb.b), 255 ]);
         g_world.fill();
+        update_url();
         };
       })("background", "background")
   });
@@ -330,6 +393,7 @@ function init() {
       $("#" + ele_parts[0] + "-color-" + ele_parts[1]).spectrum("set", c.toHexString());
     }
     g_world.fill();
+    update_url();
 
   });
 
@@ -403,6 +467,7 @@ function init() {
     }
 
     g_world.fill();
+    update_url();
 
     // Finally add it to the history list
     //
@@ -429,6 +494,7 @@ function init() {
     fill_map();
 
     g_world.fill();
+    update_url();
 
 
     // Finally add it to the history list

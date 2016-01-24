@@ -76,6 +76,16 @@ function mainWorld() {
     //"background" : "192:192:192:255"
   };
 
+  this.ele_short_name = {};
+  this.ele_short_name_rev_lookup = {};
+
+  for (var ele in this.ele_map) {
+    if (ele=="background") { continue; }
+    var short_name = ele[0] + ele[ele.length-1];
+    this.ele_short_name[ele] = short_name;
+    this.ele_short_name_rev_lookup[short_name] = ele;
+  }
+
   this.ele_count = { "tunic":3, "boot":3, "pant":2, "arm":3, "skin":3, "hair":1, "weapon":5, "background":1 };
 
   this.lock_state = "base-shadow-highlight";
@@ -292,6 +302,24 @@ mainWorld.prototype.set_color_hsv = function(class_name, html_ele_id, h, s, v) {
   var thsv = new_hsv.toHsv();
   hsv_str = "hsv(" + thsv.h + "," + thsv.s + "," + thsv.v + ")";
   //$("#" + html_ele_id).spectrum("set", new_hsv.toHexString());
+  $("#" + html_ele_id).spectrum("set", hsv_str);
+}
+
+mainWorld.prototype.set_color_rgb = function(class_name, html_ele_id, r, g, b) {
+
+  var new_rgb = tinycolor("rgb(" + r + "," + g + "," + g + ")");
+  var rgb = new_rgb.toRgb();
+
+  var src_color = this.ele_map[class_name]
+  this.color_map[src_color] =
+     new Uint8ClampedArray([ Math.floor(rgb.r),
+                             Math.floor(rgb.g),
+                             Math.floor(rgb.b), 255 ]);
+
+  //$("#" + class_name + "-color-" + ii).spectrum("set", new_rgb.toHexString());
+  var thsv = new_rgb.toHsv();
+  hsv_str = "hsv(" + thsv.h + "," + thsv.s + "," + thsv.v + ")";
+  //$("#" + html_ele_id).spectrum("set", new_rgb.toHexString());
   $("#" + html_ele_id).spectrum("set", hsv_str);
 }
 
