@@ -112,6 +112,7 @@ function update_url() {
     var tc = tinycolor("rgb(" + r + " " + g + " " + b + ")");
     var s = tc.toHex();
 
+    /*
     console.log("----");
     console.log(ele, r, g, b);
     console.log(ele, s);
@@ -119,6 +120,7 @@ function update_url() {
     var __hg = g.toString(16);
     var __hb = b.toString(16);
     console.log(ele, __hr, __hg, __hb);
+    */
 
 
 
@@ -141,6 +143,7 @@ function delayed_init() {
 
     load_url_state();
     g_world.fill();
+    update_url();
   } else {
     setTimeout(delayed_init, 100);
   }
