@@ -140,6 +140,7 @@ imageCache.prototype.draw_s = function(name, sx, sy, sw, sh, x, y, w, h, ang_rad
   if ((sx<0) || (sy<0) || ((sx+sw)>iw) || ((sy+sh)>ih)) {
     s = sx + "," +  sy + "," +  (sx+sw) + "," +  (sy+sh) + "," +  img.width + "," +  img.height;
     console.log("ERROR!!! " +  name + " " + s);
+    console.trace();
     return;
   }
 

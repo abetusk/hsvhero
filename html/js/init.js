@@ -1,3 +1,5 @@
+var HSVHERO_URL = "http://mechaelephant.com/hsvhero";
+
 var g_world;
 var lastUpdateTime = new Date();
 var updateThreshold = 15;
@@ -93,6 +95,7 @@ function load_url_state() {
 
 }
 
+
 function update_url() {
 
   var param_a = [];
@@ -114,9 +117,13 @@ function update_url() {
 
   if (param_a.length==0) {
     window.history.replaceState("", "HSV Hero", "");
+
+    $("#clipboard-textarea").val(HSVHERO_URL);
     return;
   }
   window.history.replaceState("", "HSV Hero", "?" + param_a.join("&"));
+  $("#clipboard-textarea").val(HSVHERO_URL + "?" + param_a.join("&"));
+
 }
 
 function delayed_init() {
@@ -558,6 +565,21 @@ function init() {
 
   });
 
+  $("#clipboard-copy").on("click", function() {
+    console.log("clipboard");
+    var cpytxt = document.querySelector('.js-copytextarea');
+    cpytxt.select();
+
+    try {
+      var s = document.execCommand('copy');
+      var msg = (s ? "yep" : "nope");
+      console.log(">>>>", msg);
+    } catch (err) {
+      console.log("nope", err);
+    }
+  });
+
+  $("#clipboard-textarea").val(HSVHERO_URL);
 
 }
 

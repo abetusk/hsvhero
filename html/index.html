@@ -71,6 +71,10 @@
                 <ul class="nav navbar-nav">
                   <li> <a href="https://github.com/abetusk/hsvhero">Source</a> </li>
 
+                  <li><a href="http://interdimensional.space/">ISW</a></li>
+
+                  <li><a href="http://opengameart.org/users/interdimensional">Art on OGA</a></li>
+
                   <li>
                     <a href="#" class="button" id="btn-download" download='hsvhero.png'><i class="fa fa-cloud-download"></i> Download</a>
                   </li>
@@ -86,6 +90,8 @@
 -->
 
               </ul>
+
+
             </div>
 
 
@@ -121,6 +127,19 @@
     <!-- Page Content -->
     <div class="container">
 
+      <div class='row'>
+        <div class='col-md-2'></div>
+        <div class='col-md-8'>
+          <h2 style='text-align:center'><b>HSV Hero</b></h2>
+          <h3 style='text-align:center'><i>Be your own hero.  Make your future</i></h3>
+        </div>
+        <div class='col-md-2'>
+          <h6>An <a href="http://interdimensional.space/">ISW</a> X abetusk collaboration</h6>
+        </div>
+      </div>
+
+      <hr>
+
         <div class="row">
 
           <!-- ******************************* -->
@@ -129,15 +148,19 @@
           <!-- Canvas -->
           <div class="col-md-5">
             <div class="row">
-              <div class="btn-group" role="group">
-                <button type="button" id='x1' class="btn btn-default">x1</button>
-                <button type="button" id='x2' class="btn btn-default">x2</button>
-                <button type="button" id='x4' class="btn btn-default">x4</button>
-                <button type="button" id='x8' class="btn btn-default">x8</button>
-                <!-- <button type="button" id='x16' class="btn btn-default">x16</button> -->
 
+              <div class='col-md-5'>
+                <div class="btn-group" role="group">
+                  <button type="button" id='x1' class="btn btn-default">x1</button>
+                  <button type="button" id='x2' class="btn btn-default">x2</button>
+                  <button type="button" id='x4' class="btn btn-default">x4</button>
+                  <button type="button" id='x8' class="btn btn-default">x8</button>
+                  <!-- <button type="button" id='x16' class="btn btn-default">x16</button> -->
+
+                </div>
               </div>
             </div>
+
             <div class="row">
               <canvas 
                 id='canvas' 
@@ -145,14 +168,25 @@
                 tabindex='0'> </canvas>
             </div>
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-4">
                 Background
                 <input id="background-color" />
               </div>
-              <div class="col-md-6">
-                <input type="hidden" id="file-upload" name="files[]" text="upload" />
-                <!-- <div id="list"></div> -->
+
+              <div class='col-md-4'>
+                <!-- <button type="button" id="clipboard-copy" class="btn btn-default pull-right" style="text-align:right"> -->
+                <button type="button" id="clipboard-copy" class="btn btn-default" >
+                  <i class="fa fa-pencil-square-o"></i>
+                  Copy to Clipboard
+                </button>
               </div>
+
+              <div class='col-md-2'>
+                <textarea id='clipboard-textarea' rows='1' cols='10' class='js-copytextarea'></textarea>
+              </div>
+
+              <input type="hidden" id="file-upload" name="files[]" text="upload" />
+
             </div>
 
           </div>
