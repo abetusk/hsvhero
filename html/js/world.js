@@ -298,16 +298,15 @@ mainWorld.prototype.set_color_hsv = function(class_name, html_ele_id, h, s, v) {
                              Math.floor(rgb.g),
                              Math.floor(rgb.b), 255 ]);
 
-  //$("#" + class_name + "-color-" + ii).spectrum("set", new_hsv.toHexString());
   var thsv = new_hsv.toHsv();
-  hsv_str = "hsv(" + thsv.h + "," + thsv.s + "," + thsv.v + ")";
-  //$("#" + html_ele_id).spectrum("set", new_hsv.toHexString());
+  hsv_str = "hsv(" + Math.floor(thsv.h) + "," + thsv.s + "," + thsv.v + ")";
+
   $("#" + html_ele_id).spectrum("set", hsv_str);
 }
 
 mainWorld.prototype.set_color_rgb = function(class_name, html_ele_id, r, g, b) {
 
-  var new_rgb = tinycolor("rgb(" + r + "," + g + "," + g + ")");
+  var new_rgb = tinycolor("rgb(" + r + "," + g + "," + b + ")");
   var rgb = new_rgb.toRgb();
 
   var src_color = this.ele_map[class_name]
@@ -316,10 +315,8 @@ mainWorld.prototype.set_color_rgb = function(class_name, html_ele_id, r, g, b) {
                              Math.floor(rgb.g),
                              Math.floor(rgb.b), 255 ]);
 
-  //$("#" + class_name + "-color-" + ii).spectrum("set", new_rgb.toHexString());
   var thsv = new_rgb.toHsv();
-  hsv_str = "hsv(" + thsv.h + "," + thsv.s + "," + thsv.v + ")";
-  //$("#" + html_ele_id).spectrum("set", new_rgb.toHexString());
+  hsv_str = "hsv(" + Math.floor(thsv.h) + "," + thsv.s + "," + thsv.v + ")";
   $("#" + html_ele_id).spectrum("set", hsv_str);
 }
 

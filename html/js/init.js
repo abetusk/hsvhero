@@ -109,8 +109,18 @@ function update_url() {
     var b = cur_color4[2];
     var a = cur_color4[3]/255.0;
 
-    var tc = tinycolor("rgba " + r + " " + g + " " + b + " " + a );
+    var tc = tinycolor("rgb(" + r + " " + g + " " + b + ")");
     var s = tc.toHex();
+
+    console.log("----");
+    console.log(ele, r, g, b);
+    console.log(ele, s);
+    var __hr = r.toString(16);
+    var __hg = g.toString(16);
+    var __hb = b.toString(16);
+    console.log(ele, __hr, __hg, __hb);
+
+
 
     param_a.push(short_name + "=" + s);
   }
@@ -573,9 +583,8 @@ function init() {
     try {
       var s = document.execCommand('copy');
       var msg = (s ? "yep" : "nope");
-      console.log(">>>>", msg);
     } catch (err) {
-      console.log("nope", err);
+      console.log("clipboard copy error", err);
     }
   });
 
